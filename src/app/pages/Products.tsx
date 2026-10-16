@@ -4,7 +4,6 @@ import type { CollectionSlug, Product } from "../data/types";
 import { useI18n } from "../i18n/i18n";
 import { useStore } from "../store/store";
 import { COLLECTIONS } from "../data/catalog";
-import { ART_CERAMIC_CATALOGUE } from "../data/artceramicImport";
 import { ProductCard } from "../components/ProductCard";
 import { Chip, Container, Section } from "../components/ui";
 import "../components/Discovery.css";
@@ -17,7 +16,7 @@ function uniq<T>(arr: (T | undefined)[]): T[] {
 
 export function Products({ fixedCollection }: { fixedCollection?: CollectionSlug }) {
   const { t, locale } = useI18n();
-  const { products } = useStore();
+  const { products, stagedProductCount, catalogueLoadState } = useStore();
   const [params, setParams] = useSearchParams();
   const q = (params.get("q") ?? "").trim().toLowerCase();
 
@@ -83,10 +82,10 @@ export function Products({ fixedCollection }: { fixedCollection?: CollectionSlug
     ? { en: "Marble surfaces", ar: "أسطح رخامية", fr: "Surfaces marbrées" }[locale]
     : material === "tiles" ? { en: "Tiles", ar: "بلاط", fr: "Carrelage" }[locale] : null;
   const catalogueSummary = locale === "ar"
-    ? `${products.length} منتجًا في الكتالوج الحالي · ${ART_CERAMIC_CATALOGUE.totalImages} مرجع صورة لـ Art Ceramic`
+    ? `${products.length} منتج معروض · ${stagedProductCount} منتج قيد مراجعة المصدر · ${catalogueLoadState === "unavailable" ? "المصدر الخارجي غير متاح" : catalogueLoadState === "loading" ? "جار تحميل المصدر الخارجي" : "المصدر الخارجي تم تحميله"}`
     : locale === "fr"
-      ? `${products.length} produits dans le catalogue actuel · ${ART_CERAMIC_CATALOGUE.totalImages} références d’images Art Ceramic`
-      : `${products.length} products in the current catalogue · ${ART_CERAMIC_CATALOGUE.totalImages} Art Ceramic gallery image references`;
+      ? `${products.length} produits publiés · ${stagedProductCount} en attente de validation`
+      : `${products.length} public products · ${stagedProductCount} staged · supplier feed: ${catalogueLoadState}`;
 
   const group = (label: string, values: string[], val: string | null, set: (v: string | null) => void) =>
     values.length > 1 && (
@@ -115,6 +114,7 @@ export function Products({ fixedCollection }: { fixedCollection?: CollectionSlug
           )}
         </div>
 
+        <p style={{ color: "var(--idea-text-muted)", fontSize: "var(--idea-text-xs)", marginBottom: "var(--idea-space-4)" }}>{locale === "ar" ? "التصنيف الحالي من المصدر ولا يمثل توثيقًا مستقلًا للخامة. معلومات الخامة تحتاج مراجعة المورد." : locale === "fr" ? "La catégorie fournisseur ne constitue pas une certification du matériau." : "Supplier category labels are not material certification. Material type requires supplier validation."}</p>
         {/* Mobile filter toolbar */}
         <div className="idea-filter-toolbar" style={{ display: "none", justifyContent: "space-between", alignItems: "center", gap: "var(--idea-space-3)", marginBottom: "var(--idea-space-4)" }}>
           <button onClick={() => setMobileOpen(true)}

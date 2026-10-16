@@ -6,7 +6,7 @@ import { supabase } from "../backend/supabaseClient";
 import { Container, Section, Button } from "../components/ui";
 import { Panel, Field, inputStyle } from "../components/dash";
 
-function AuthShell({ mode }: { mode: "login" | "register"; defaultRole?: Role }) {
+function AuthShell({ mode }: { mode: "login" | "register" }) {
   const { t } = useI18n();
   const nav = useNavigate();
   const [email, setEmail] = useState("");

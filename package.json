@@ -6,7 +6,9 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite --host 0.0.0.0 --port 3000",
-    "lint": "vite build"
+    "lint": "vite build",
+    "test:catalogue": "node --test tests/catalogue.test.mjs",
+    "check": "npm run test:catalogue && npm run build"
   },
   "dependencies": {
     "react": "18.3.1",
