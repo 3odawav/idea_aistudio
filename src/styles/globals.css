@@ -1,0 +1,407 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   IDEA — Luxury Black & Gold design system tokens
+   Edit these variables to re-skin the entire application.
+   All generated UI references these tokens (never raw hex).
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Color: surfaces (dark, layered) ── */
+  --idea-bg: #ffffff;
+  --idea-bg-2: #f4f4f4;
+  --idea-surface: #ffffff;
+  --idea-surface-2: #f4f4f4;
+  --idea-overlay: rgba(255, 255, 255, 0.9);
+  --idea-scrim: rgba(0, 0, 0, 0.6);
+  --idea-image-overlay: linear-gradient(0deg, rgba(6, 6, 8, 0.9), transparent 60%);
+  --idea-image-overlay-soft: linear-gradient(0deg, rgba(6, 6, 8, 0.85), transparent 55%);
+  --idea-search-panel: rgba(14, 13, 17, 0.86);
+  --idea-search-tab-muted: rgba(246, 241, 230, 0.6);
+  --idea-hero-overlay: linear-gradient(90deg, rgba(22, 22, 22, 0.84) 0%, rgba(22, 22, 22, 0.58) 47%, rgba(22, 22, 22, 0.14) 100%);
+  --idea-hero-copy: rgba(255, 255, 255, 0.9);
+  --idea-hero-control: rgba(255, 255, 255, 0.52);
+  --idea-hero-control-bg: rgba(255, 255, 255, 0.86);
+
+  /* ── Color: gold accent scale (richer in dark mode) ── */
+  --idea-gold: #ff7200;
+  --idea-gold-bright: #ff7200;
+  --idea-gold-deep: #d85d00;
+  --idea-gold-soft: rgba(255, 114, 0, 0.12);
+  --idea-gold-sheen: #fff0e2;
+
+  /* ── Color: text ── */
+  --idea-text: #454545;
+  --idea-text-muted: #686868;
+  --idea-text-faint: #8a8a8a;
+  --idea-on-gold: #ffffff;
+
+  /* ── Color: lines & feedback ── */
+  --idea-border: rgba(69, 69, 69, 0.16);
+  --idea-border-neutral: rgba(69, 69, 69, 0.1);
+  --idea-success: #6bbf7b;
+  --idea-warning: #e0b64b;
+  --idea-danger: #d16a5a;
+  --idea-info: #7fa8d1;
+
+  /* ── Radius ── */
+  --idea-radius-xs: 3px;
+  --idea-radius-sm: 6px;
+  --idea-radius-md: 10px;
+  --idea-radius-lg: 18px;
+  --idea-radius-full: 999px;
+
+  /* ── Spacing scale ── */
+  --idea-space-1: 4px;
+  --idea-space-2: 8px;
+  --idea-space-3: 12px;
+  --idea-space-4: 16px;
+  --idea-space-5: 24px;
+  --idea-space-6: 32px;
+  --idea-space-7: 48px;
+  --idea-space-8: 64px;
+  --idea-space-9: 96px;
+
+  /* ── Layout and interaction primitives ── */
+  --idea-content-max: 1320px;
+  --idea-control-height: 44px;
+  --idea-control-height-compact: 36px;
+  --idea-focus-ring: 0 0 0 3px var(--idea-gold-soft);
+
+  /* ── Borders / elevation ── */
+  --idea-hairline: 1px solid var(--idea-border);
+  --idea-shadow-sm: 0 2px 8px rgba(69, 69, 69, 0.12);
+  --idea-shadow-md: 0 12px 32px rgba(69, 69, 69, 0.16);
+  --idea-shadow-gold: 0 8px 30px rgba(255, 114, 0, 0.18);
+  --idea-shadow-overlay: 0 30px 60px rgba(0, 0, 0, 0.5);
+  --idea-shadow-drawer: 0 0 60px rgba(0, 0, 0, 0.6);
+
+  /* ── Typography families ── */
+  --idea-font-display: 'Oswald', 'Jost';
+  --idea-font-body: 'Jost';
+  --idea-font-arabic: 'Cairo';
+
+  /* ── Type scale ── */
+  --idea-text-xs: 12px;
+  --idea-text-sm: 14px;
+  --idea-text-base: 16px;
+  --idea-text-lg: 20px;
+  --idea-text-xl: 26px;
+  --idea-text-2xl: 34px;
+  --idea-text-3xl: 46px;
+  --idea-text-4xl: 64px;
+  --idea-text-hero: clamp(40px, 6vw, 88px);
+
+  --idea-tracking-wide: 0.18em;   /* eyebrow / labels */
+  --idea-tracking: 0.02em;
+}
+
+/* ═══ Light mode — white canvas with dark-blue accent ═══════════════════ */
+[data-theme='dark'] {
+  --idea-bg: #101010;
+  --idea-bg-2: #191919;
+  --idea-surface: #202020;
+  --idea-surface-2: #292929;
+  --idea-overlay: rgba(16, 16, 16, 0.82);
+  --idea-scrim: rgba(0, 0, 0, 0.6);
+  --idea-image-overlay: linear-gradient(0deg, rgba(6, 6, 8, 0.9), transparent 60%);
+  --idea-image-overlay-soft: linear-gradient(0deg, rgba(6, 6, 8, 0.85), transparent 55%);
+  --idea-search-panel: rgba(14, 13, 17, 0.86);
+  --idea-search-tab-muted: rgba(246, 241, 230, 0.6);
+  --idea-hero-overlay: linear-gradient(90deg, rgba(16, 16, 16, 0.9) 0%, rgba(16, 16, 16, 0.6) 47%, rgba(16, 16, 16, 0.16) 100%);
+  --idea-hero-copy: rgba(255, 255, 255, 0.84);
+  --idea-hero-control: rgba(255, 255, 255, 0.35);
+  --idea-hero-control-bg: rgba(26, 26, 26, 0.68);
+
+  /* the "gold" accent role is replaced by a deep royal blue */
+  --idea-gold: #ff7200;
+  --idea-gold-bright: #ff8a32;
+  --idea-gold-deep: #cf5b00;
+  --idea-gold-soft: rgba(255, 114, 0, 0.16);
+  --idea-gold-sheen: #d9e2ff;
+
+  --idea-text: #f5f5f5;
+  --idea-text-muted: #b1b1b1;
+  --idea-text-faint: #858585;
+  --idea-on-gold: #ffffff;
+
+  --idea-border: rgba(255, 114, 0, 0.18);
+  --idea-border-neutral: rgba(255, 255, 255, 0.1);
+
+  --idea-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --idea-shadow-md: 0 12px 32px rgba(0, 0, 0, 0.5);
+  --idea-shadow-gold: 0 8px 30px rgba(255, 114, 0, 0.18);
+  --idea-shadow-overlay: 0 30px 60px rgba(0, 0, 0, 0.5);
+  --idea-shadow-drawer: 0 0 60px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Base element styling bound to the tokens ── */
+html {
+  background: var(--idea-bg);
+  transition: background 0.3s ease;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  overflow-x: clip;
+  background: var(--idea-bg);
+  color: var(--idea-text);
+  font-family: var(--idea-font-body);
+  font-size: var(--idea-text-base);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* One visible, token-driven focus treatment across links and controls. */
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid var(--idea-gold);
+  outline-offset: 2px;
+  box-shadow: var(--idea-focus-ring);
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  cursor: not-allowed;
+  opacity: 0.56;
+}
+
+/* RTL: Arabic uses the Cairo family for everything */
+[dir='rtl'] body,
+[dir='rtl'] .idea-display {
+  font-family: var(--idea-font-arabic);
+}
+
+.idea-display {
+  font-family: var(--idea-font-display);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: var(--idea-tracking);
+}
+
+/* Hero headline — condensed Oswald, uppercase, cinematic */
+.idea-hero-title {
+  font-family: var(--idea-font-display);
+  font-weight: 600;
+  line-height: 1.06;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--idea-text);
+}
+[dir='rtl'] .idea-hero-title {
+  font-family: var(--idea-font-arabic);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 700;
+}
+
+.idea-eyebrow {
+  font-family: var(--idea-font-body);
+  text-transform: uppercase;
+  letter-spacing: var(--idea-tracking-wide);
+  color: var(--idea-gold);
+  font-size: var(--idea-text-xs);
+  font-weight: 500;
+}
+
+/* thin gold divider used across sections */
+.idea-rule {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--idea-gold) 50%,
+    transparent
+  );
+  opacity: 0.5;
+}
+
+::selection {
+  background: var(--idea-gold);
+  color: var(--idea-on-gold);
+}
+
+/* custom scrollbar to match the dark theme */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--idea-bg); }
+::-webkit-scrollbar-thumb {
+  background: var(--idea-gold-deep);
+  border-radius: var(--idea-radius-full);
+}
+
+
+/* Rich photo treatment is controlled here so the catalog can be tuned globally. */
+.idea-vivid-image {
+  filter: saturate(1.16) contrast(1.06) brightness(1.04);
+}
+
+.idea-image-unavailable {
+  display: grid;
+  place-items: center;
+  min-height: 100%;
+  padding: var(--idea-space-4);
+  background: var(--idea-surface-2);
+  color: var(--idea-text-muted);
+  font-family: var(--idea-font-body);
+  font-size: var(--idea-text-sm);
+  line-height: 1.5;
+  text-align: center;
+}
+
+.idea-image-unavailable--thumb {
+  padding: var(--idea-space-1);
+  font-size: var(--idea-text-xs);
+}
+
+/* Hero motion uses only compositor-friendly opacity and transforms. */
+.idea-hero-image--active { will-change: transform; animation: idea-hero-kenburns 12s ease-out both; }
+.idea-hero-depth { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 75% 25%, var(--idea-gold-soft), transparent 38%); mix-blend-mode: screen; opacity: 0.18; animation: idea-hero-light 12s ease-in-out both; }
+.idea-hero-reveal { opacity: 0; transform: translate3d(0, var(--idea-space-4), 0); }
+.idea-hero-copy--active .idea-hero-reveal { animation: idea-hero-reveal 0.72s cubic-bezier(.22,1,.36,1) both; }
+.idea-hero-copy--active .idea-hero-reveal--two { animation-delay: 0.08s; }
+.idea-hero-copy--active .idea-hero-reveal--three { animation-delay: 0.16s; }
+.idea-hero-copy--active .idea-hero-reveal--four { animation-delay: 0.24s; }
+@keyframes idea-hero-kenburns { from { transform: scale(1.02); } to { transform: scale(1.08); } }
+@keyframes idea-hero-light { from { transform: translate3d(-2%, 1%, 0); opacity: 0.08; } to { transform: translate3d(2%, -1%, 0); opacity: 0.2; } }
+@keyframes idea-hero-reveal { to { opacity: 1; transform: translate3d(0, 0, 0); } }
+
+/* Keep controls clear of the iPhone notch and home indicator. */
+@supports (padding: max(0px)) {
+  header { padding-top: env(safe-area-inset-top); }
+  footer { padding-bottom: env(safe-area-inset-bottom); }
+}
+
+.idea-official-logo {
+  display: block;
+  width: min(100%, 340px);
+  background: transparent;
+}
+
+.idea-official-logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: transparent;
+}
+
+.idea-official-logo-fallback {
+  display: grid;
+  color: var(--idea-text);
+  font-family: var(--idea-font-body);
+  font-size: var(--idea-text-sm);
+  font-weight: 600;
+  letter-spacing: var(--idea-tracking);
+  line-height: 1.05;
+}
+
+.idea-official-logo-fallback strong {
+  color: var(--idea-gold-bright);
+  font-family: var(--idea-font-display);
+  font-size: var(--idea-text-xl);
+  font-weight: 600;
+  letter-spacing: var(--idea-tracking-wide);
+}
+
+.idea-official-logo--compact {
+  width: 184px;
+}
+
+@media (max-width: 480px) {
+  .idea-official-logo--compact { width: 148px; }
+}
+
+@media (max-width: 640px) {
+  .idea-official-logo--compact { width: 132px; }
+}
+
+/* Touch-first sizing for iPhone, iPad, and Android viewports. */
+@media (max-width: 1024px) {
+  .idea-container { padding-inline: var(--idea-space-5) !important; }
+}
+
+@media (max-width: 760px) {
+  .idea-container { padding-inline: var(--idea-space-4) !important; }
+  .idea-hero-carousel { height: min(88svh, 680px) !important; }
+  .idea-hero-carousel button { min-height: calc(var(--idea-space-5) + var(--idea-space-4)); }
+  .idea-hero-carousel .idea-hero-arrow { display: none !important; }
+  .idea-hero-content > div { max-width: none !important; text-align: center; }
+  .idea-hero-content > div > div:last-child { justify-content: center; }
+  .idea-hero-content .idea-hero-title { font-size: 34px !important; line-height: 1.04; }
+  .idea-hero-content p { font-size: 18px !important; max-width: 430px; margin-inline: auto !important; }
+  .idea-hero-overlay { background: linear-gradient(180deg, var(--idea-scrim), transparent 58%, var(--idea-scrim)) !important; }
+  .idea-hero-copy--active .idea-hero-reveal { animation: none; opacity: 1; transform: none; }
+}
+
+@media (max-width: 480px) {
+  .idea-container { padding-inline: var(--idea-space-3) !important; }
+  .idea-hero-carousel { height: min(86svh, 640px) !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+  .idea-hero-image--active, .idea-hero-depth, .idea-hero-copy--active .idea-hero-reveal { animation: none; }
+  .idea-hero-image--active { will-change: auto; }
+  .idea-hero-reveal { opacity: 1; transform: none; }
+}
+
+
+/* Shared captions for both homepage collection rows. */
+.idea-main-collection-scrim {
+  position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.06),transparent 35%,rgba(0,0,0,.12));
+}
+.idea-main-collection-nameplate {
+  position:absolute;top:16px;inset-inline:16px;z-index:3;
+  display:flex;flex-direction:column;align-items:flex-start;gap:5px;
+}
+.idea-main-collection-eyebrow,
+.idea-main-collection-title,
+.idea-main-collection-footer span {
+  width:fit-content;max-width:100%;box-sizing:border-box;
+  background:rgba(0,0,0,.22);border-radius:6px;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  text-shadow:0 1px 4px rgba(0,0,0,.8);
+}
+.idea-main-collection-eyebrow {
+  display:block;padding:3px 6px;font-family:var(--idea-font-body);
+  font-weight:600;font-size:9px;color:#ffd0ad!important;
+  letter-spacing:.09em;line-height:1.4;
+}
+.idea-main-collection-title {
+  margin:0!important;padding:4px 8px;
+  font-family:var(--idea-font-body);font-size:18px!important;
+  font-weight:600;color:#fff!important;line-height:1.35;
+  white-space:normal;overflow-wrap:anywhere;
+}
+.idea-main-collection-footer {
+  position:absolute;inset-inline:16px;bottom:16px;z-index:2;
+  display:flex;align-items:end;justify-content:space-between;gap:8px;
+  color:#fff!important;font-size:11px;line-height:1.5;
+}
+.idea-main-collection-footer span {
+  min-width:0;padding:4px 6px;display:-webkit-box;-webkit-box-orient:vertical;
+  -webkit-line-clamp:2;overflow:hidden;
+}
+.idea-main-collection-footer svg {flex:none;color:#ffcfad;filter:drop-shadow(0 1px 3px #000);}
+.idea-ceramic-grid a:focus-visible {outline:3px solid #ff7200;outline-offset:3px;}
+@media (max-width:800px) {
+  .idea-ceramic-grid {grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;}
+  .idea-main-collection-nameplate {top:12px;inset-inline:12px;}
+  .idea-main-collection-footer {inset-inline:12px;bottom:12px;}
+}
+@media (max-width:480px) {
+  .idea-main-collection-nameplate {top:10px;inset-inline:10px;gap:4px;}
+  .idea-main-collection-eyebrow {font-size:8px;letter-spacing:.04em;}
+  .idea-main-collection-title {font-size:15px!important;padding:3px 6px;}
+  .idea-main-collection-footer {inset-inline:10px;bottom:10px;font-size:10px;gap:5px;}
+  .idea-main-collection-footer svg {width:14px;height:14px;}
+}
