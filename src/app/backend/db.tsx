@@ -500,7 +500,7 @@ const DEMO_AUDIT: AuditEntry[] = [
 function getInitialDb(): DB {
   try {
     const raw = localStorage.getItem("idea.marketplace.db");
-    if (raw) {
+    if (import.meta.env.DEV && raw) {
       const parsed = JSON.parse(raw);
       if (parsed && Array.isArray(parsed.plans) && parsed.plans.length > 0) {
         return parsed;
@@ -511,14 +511,14 @@ function getInitialDb(): DB {
   }
 
   return {
-    users: DEMO_USERS,
-    businesses: DEMO_BUSINESSES,
-    requests: DEMO_REQUESTS,
-    offers: DEMO_OFFERS,
-    orders: DEMO_ORDERS,
-    messages: DEMO_MESSAGES,
+    users: import.meta.env.DEV ? DEMO_USERS : [],
+    businesses: import.meta.env.DEV ? DEMO_BUSINESSES : [],
+    requests: import.meta.env.DEV ? DEMO_REQUESTS : [],
+    offers: import.meta.env.DEV ? DEMO_OFFERS : [],
+    orders: import.meta.env.DEV ? DEMO_ORDERS : [],
+    messages: import.meta.env.DEV ? DEMO_MESSAGES : [],
     plans: DEFAULT_PLANS,
-    subscriptions: [
+    subscriptions: import.meta.env.DEV ? [
       {
         userId: "usr_buyer_demo",
         planId: "plan_cust_pro",
@@ -535,11 +535,11 @@ function getInitialDb(): DB {
         startedAt: Date.now() - 86400000 * 25,
         renewsAt: Date.now() + 86400000 * 340,
       },
-    ],
-    payments: DEFAULT_PAYMENTS,
-    roomProjects: DEMO_ROOM_PROJECTS,
-    audit: DEMO_AUDIT,
-    sessionUserId: "usr_buyer_demo",
+    ] : [],
+    payments: DEFAULT_PAYMENTS.map(payment => ({ ...payment, merchantConfigured: import.meta.env.DEV && payment.merchantConfigured, webhookOk: import.meta.env.DEV && payment.webhookOk })),
+    roomProjects: import.meta.env.DEV ? DEMO_ROOM_PROJECTS : [],
+    audit: import.meta.env.DEV ? DEMO_AUDIT : [],
+    sessionUserId: null,
   };
 }
 
@@ -585,8 +585,7 @@ function dbRole(role: "buyer" | "supplier" | "admin" | string): Role {
 export function BackendProvider({ children }: { children: ReactNode }) {
   const [db, setDb] = useState<DB>(getInitialDb);
   const [session, setSession] = useState<User | null>(() => {
-    const initial = getInitialDb();
-    return initial.users.find((u) => u.id === initial.sessionUserId) || initial.users[0] || null;
+    return null;
   });
 
   // Persist local marketplace DB
@@ -615,7 +614,7 @@ export function BackendProvider({ children }: { children: ReactNode }) {
           id: u.id,
           name: u.user_metadata?.display_name || u.email?.split("@")[0] || "IDEA Member",
           email: u.email,
-          role: dbRole(u.user_metadata?.role || "customer"),
+          role: dbRole(u.app_metadata?.role || "customer"),
           provider: "supabase",
           createdAt: Date.parse(u.created_at || new Date().toISOString()),
         };
@@ -632,14 +631,14 @@ export function BackendProvider({ children }: { children: ReactNode }) {
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, current) => {
       if (!current?.user) {
-        // preserve local demo user if user didn't explicitly log out
+        if (_event === "SIGNED_OUT") setSession(null);
       } else {
         const u = current.user;
         const supaUser: User = {
           id: u.id,
           name: u.user_metadata?.display_name || u.email?.split("@")[0] || "IDEA Member",
           email: u.email,
-          role: dbRole(u.user_metadata?.role || "customer"),
+          role: dbRole(u.app_metadata?.role || "customer"),
           provider: "supabase",
           createdAt: Date.parse(u.created_at || new Date().toISOString()),
         };
@@ -654,6 +653,7 @@ export function BackendProvider({ children }: { children: ReactNode }) {
 
   const api = useMemo<Api>(() => ({
     signIn: (provider, role, info) => {
+      if (!import.meta.env.DEV || provider !== "demo") throw new Error("Demo sign-in is disabled in production.");
       const existing = db.users.find((u) => (info?.email && u.email === info.email) || u.role === role);
       if (existing) {
         const updated = { ...existing, role, name: info?.name || existing.name };
@@ -692,7 +692,7 @@ export function BackendProvider({ children }: { children: ReactNode }) {
     },
 
     setRole: (role) => {
-      if (!session) return;
+      if (!import.meta.env.DEV || !session) return; // Only backend-issued roles are trusted in production.
       const updated = { ...session, role };
       setSession(updated);
       setDb((d) => ({

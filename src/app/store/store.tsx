@@ -13,6 +13,8 @@ export interface QuoteItem {
 
 interface StoreCtx {
   products: Product[];
+  stagedProductCount: number;
+  catalogueLoadState: "loading" | "ready" | "unavailable";
   favorites: string[];
   quote: QuoteItem[];
   compare: string[];
@@ -48,11 +50,19 @@ function usePersisted<T>(key: string, initial: T): [T, React.Dispatch<React.SetS
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   // Products imported from the source export. Unconfirmed fields stay empty.
-  const [products, setProducts] = useState<Product[]>(() => ART_CERAMIC_PRODUCTS);
+  const [products] = useState<Product[]>(() => ART_CERAMIC_PRODUCTS.filter(product => product.approved));
+  const [stagedProductCount, setStagedProductCount] = useState(0);
+  const [catalogueLoadState, setCatalogueLoadState] = useState<"loading" | "ready" | "unavailable">("loading");
   useEffect(() => {
+    let active = true;
     fetchAbaElMozahemProducts()
-      .then((incoming) => setProducts((current) => [...current, ...incoming.filter((product) => !current.some((existing) => existing.id === product.id))]))
-      .catch(() => { /* Source remains staged in registry; keep verified local catalogue available. */ });
+      .then(incoming => {
+        if (!active) return;
+        setStagedProductCount(incoming.filter(product => !product.approved).length);
+        setCatalogueLoadState("ready");
+      })
+      .catch(() => { if (active) setCatalogueLoadState("unavailable"); });
+    return () => { active = false; };
   }, []);
   const { session } = useBackend();
   const [favorites, setFavorites] = usePersisted<string[]>("idea.favorites", ["manila-95", "venezia-96"]);
@@ -72,6 +82,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const value = useMemo<StoreCtx>(
     () => ({
       products,
+      stagedProductCount,
+      catalogueLoadState,
       favorites,
       quote,
       compare,
@@ -98,7 +110,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       removeFromQuote: (id) => setQuote((q) => q.filter((i) => i.productId !== id)),
       clearQuote: () => setQuote([]),
     }),
-    [products, favorites, quote, compare, session, setQuote, setCompare]
+    [products, stagedProductCount, catalogueLoadState, favorites, quote, compare, session, setQuote, setCompare]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

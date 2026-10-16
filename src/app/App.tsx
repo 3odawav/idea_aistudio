@@ -34,7 +34,7 @@ import { SurfaceStyles } from "./pages/SurfaceStyles";
 
 function ProtectedRoute({ roles }: { roles?: Role[] }) {
   const { session } = useBackend();
-  if (!session) return <Navigate to="/login" replace />;
+  if (!session || (session.provider !== "supabase" && !(import.meta.env.DEV && session.provider === "demo"))) return <Navigate to="/login" replace />;
   if (roles && !roles.includes(session.role)) return <Navigate to="/" replace />;
   return <Outlet />;
 }
