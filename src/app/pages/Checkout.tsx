@@ -36,6 +36,7 @@ export function Checkout() {
   if (!order && !plan) return <Section style={{ paddingTop: "var(--idea-space-8)" }}><Container style={{ maxWidth: 560 }}><EmptyState title="Nothing to pay" sub="Accept an offer or choose a subscription plan." /></Container></Section>;
 
   const pay = () => {
+    if (!import.meta.env.DEV) { setDone("fail"); return; }
     // Sandbox only: a method must be enabled with configured merchant creds to "authorize".
     const ok = !!cfg?.merchantConfigured;
     if (order) api.sandboxPay(order.id, ok);
@@ -98,9 +99,9 @@ export function Checkout() {
               );
             })}
           </div>
-          <Button style={{ width: "100%", marginTop: "var(--idea-space-5)" }} onClick={pay}><Lock size={15} /> Pay {amount.toLocaleString()} EGP (sandbox)</Button>
+          <Button style={{ width: "100%", marginTop: "var(--idea-space-5)" }} disabled={!import.meta.env.DEV} onClick={pay}><Lock size={15} /> Pay {amount.toLocaleString()} EGP (sandbox)</Button>
           <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "center", marginTop: 12, color: "var(--idea-text-faint)", fontSize: "var(--idea-text-xs)" }}>
-            <ShieldCheck size={13} color="var(--idea-gold)" /> Sandbox environment · no real charge · card data is never stored
+            <ShieldCheck size={13} color="var(--idea-gold)" /> {import.meta.env.DEV ? "Sandbox environment · no real charge · card data is never stored" : "Checkout disabled until a real production payment integration is configured"}
           </div>
         </Panel>
       </Container>

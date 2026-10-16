@@ -2,12 +2,14 @@ import { useParams } from "react-router";
 import { Link } from "react-router";
 import { useI18n } from "../i18n/i18n";
 import { COLLECTIONS } from "../data/catalog";
+import { useStore } from "../store/store";
 import type { CollectionSlug } from "../data/types";
 import { Container, Section, SectionHeader } from "../components/ui";
 import { Products } from "./Products";
 
 export function Collections() {
   const { locale, t } = useI18n();
+  const { products } = useStore();
   const groups: { key: string; label: string }[] = [
     { key: "ceramics", label: t("home.ceramicPorcelain") },
     { key: "porcelain", label: "Porcelain" },
@@ -25,12 +27,12 @@ export function Collections() {
               <div className="idea-eyebrow" style={{ marginBottom: "var(--idea-space-4)" }}>{g.label}</div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: "var(--idea-space-4)" }}>
                 {items.map((c) => (
-                  <Link key={c.slug} to={`/collections/${c.slug}`} style={{ position: "relative", aspectRatio: "4/3", borderRadius: "var(--idea-radius-lg)", overflow: "hidden", border: "var(--idea-hairline)", display: "block" }}>
+                  <Link key={c.slug} to={`/collections/${c.slug}`} aria-disabled={!products.some(p => p.collection === c.slug)} onClick={event => { if (!products.some(p => p.collection === c.slug)) event.preventDefault(); }} style={{ position: "relative", aspectRatio: "4/3", borderRadius: "var(--idea-radius-lg)", overflow: "hidden", border: "var(--idea-hairline)", display: "block", opacity: products.some(p => p.collection === c.slug) ? 1 : 0.67 }}>
                     <img className="idea-vivid-image" src={c.image} alt={c.title[locale]} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     <div style={{ position: "absolute", inset: 0, background: "var(--idea-image-overlay-soft)" }} />
                     <div style={{ position: "absolute", bottom: 0, padding: "var(--idea-space-4)" }}>
-                      <div className="idea-display" style={{ fontSize: "var(--idea-text-lg)", color: "var(--idea-text)" }}>{c.title[locale]}</div>
-                      <div style={{ color: "var(--idea-text-muted)", fontSize: "var(--idea-text-xs)", marginTop: 4 }}>{c.blurb[locale]}</div>
+                      <div className="idea-display" style={{ fontSize: "var(--idea-text-lg)", color: "var(--idea-text)" }}>{c.title[locale]} · {products.filter(p => p.collection === c.slug).length}</div>
+                      <div style={{ color: "var(--idea-text-muted)", fontSize: "var(--idea-text-xs)", marginTop: 4 }}>{products.some(p => p.collection === c.slug) ? c.blurb[locale] : locale === "ar" ? "بانتظار منتجات موثقة" : "Awaiting verified products"}</div>
                     </div>
                   </Link>
                 ))}

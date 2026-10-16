@@ -50,10 +50,28 @@ function normalize(raw: RawProduct): Product {
 }
 
 export async function fetchAbaElMozahemProducts(): Promise<Product[]> {
-  const cached = localStorage.getItem(CACHE_KEY);
-  const rawProducts: RawProduct[] = cached
-    ? JSON.parse(cached)
-    : (await (await fetch(CATALOGUE_URL)).json() as { products: RawProduct[] }).products;
-  if (!cached) localStorage.setItem(CACHE_KEY, JSON.stringify(rawProducts));
-  return rawProducts.map(normalize);
+  let rawProducts: RawProduct[] | null = null;
+  try {
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (cached) {
+      const parsed = JSON.parse(cached) as { fetchedAt?: number; products?: RawProduct[] };
+      if (Array.isArray(parsed.products) && Date.now() - (parsed.fetchedAt ?? 0) < 86400000) {
+        rawProducts = parsed.products;
+      }
+    }
+  } catch { /* Malformed cache is ignored. */ }
+
+  if (!rawProducts) {
+    const response = await fetch(CATALOGUE_URL);
+    if (!response.ok) throw new Error(`Supplier catalogue failed: ${response.status}`);
+    const payload = await response.json() as { products?: RawProduct[] };
+    if (!Array.isArray(payload.products)) throw new Error("Invalid supplier catalogue response");
+    rawProducts = payload.products;
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ fetchedAt: Date.now(), products: rawProducts })); }
+    catch { /* Browser storage quotas must not block the catalogue. */ }
+  }
+  return rawProducts
+    .filter(raw => raw && raw.id && raw.handle && raw.title && Array.isArray(raw.images) && Array.isArray(raw.variants) && (raw.image?.src || raw.images.some(image => image.src)))
+    .map(normalize);
+
 }

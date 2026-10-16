@@ -22,7 +22,7 @@ export function ProductDetail() {
 
   const gallery = product.gallery?.length ? product.gallery : [product.image];
   const unit = product.collection === "ceramics" || product.collection === "porcelain" ? "sqm" : "pieces";
-  const related = products.filter((p) => p.family === product.family && p.id !== product.id).slice(0, 4);
+  const related = product.family ? products.filter((p) => p.family === product.family && p.id !== product.id).slice(0, 4) : [];
   const fav = isFavorite(product.id);
   const activeImageFailed = failedImages.includes(activeImg);
 
@@ -76,6 +76,7 @@ export function ProductDetail() {
               {(product.usage ?? []).map((u) => <Tag key={u}>{u}</Tag>)}
             </div>
             <p style={{ color: "var(--idea-text-faint)", fontStyle: "italic", marginBottom: "var(--idea-space-5)" }}>{t("price.hidden")}</p>
+            {product.source?.reviewStatus === "needs-human-review" && <p style={{ color: "var(--idea-text-muted)", fontSize: "var(--idea-text-xs)", marginBottom: "var(--idea-space-4)" }}>{locale === "ar" ? "نوع الخامة والمواصفات الفنية بانتظار مراجعة المورد." : "Material and technical specifications are pending supplier verification."}</p>}
 
             <div style={{ background: "var(--idea-surface)", border: "var(--idea-hairline)", borderRadius: "var(--idea-radius-md)", padding: "var(--idea-space-4) var(--idea-space-5)", marginBottom: "var(--idea-space-5)" }}>
               {spec(t("label.model"), product.model)}
