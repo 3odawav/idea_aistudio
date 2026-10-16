@@ -46,10 +46,10 @@ export function AdminLayout() {
 
 export function AdminOverview() {
   const { db, api } = useBackend();
-  const { products, stagedProductCount } = useStore();
+  const { products, stagedProductCount, catalogueLoadState } = useStore();
   const stats = [
     { label: "Published products", value: products.length },
-    { label: "Pending supplier review", value: stagedProductCount },
+    { label: catalogueLoadState === "unavailable" ? "Supplier feed unavailable" : "Pending supplier review", value: catalogueLoadState === "loading" ? "..." : catalogueLoadState === "unavailable" ? "N/A" : stagedProductCount },
     { label: "Suppliers", value: db.businesses.length },
     { label: "Requests", value: db.requests.length },
     { label: "Offers", value: db.offers.length },
